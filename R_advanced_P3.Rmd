@@ -1,0 +1,125 @@
+---
+title: "R_advanced_P3"
+subtitle : "Play around with Factor"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Import Data
+
+```{r}
+fin = read_csv("./data/Future500.csv")
+head(fin)
+tail(fin)
+str(fin)
+summary(fin)
+```
+Changing  from non-factor to factor:
+
+```{r}
+fin$ID = factor(fin$ID)
+#summary(fin)
+fin$Inception = factor(fin$Inception)
+#str(fin)
+```
+
+## Factor Variable Trap (FVT)
+
+### *Converting into Numerics For Chararcters:*
+
+```{r}
+a = c("12", "13", "14", "12", "12")
+#typeof(a)
+b = as.numeric(a)
+#typeof(b)
+```
+
+### *Converting into Numerics For Factors:*
+
+```{r}
+z = factor(c("12", "13", "14", "12", "12"))
+typeof(z)
+y = as.numeric(z) #Wrong result
+```
+Correct way :
+```{r}
+x = as.numeric(as.character(z))
+typeof(x)
+```
+
+## `sub()` and `gsub()`
+
+```{r}
+#?sub()
+fin$Expenses = gsub(" Dollars", "", fin$Expenses)
+fin$Expenses = gsub(",", "", fin$Expenses)
+head(fin)
+str(fin) #expenses no longer a factor but character variable
+
+```
+When including a special symbol : "$"
+
+```{r}
+fin$Revenue = gsub("\\$", "", fin$Revenue)
+fin$Revenue = gsub(",", "", fin$Revenue)
+head(fin)
+fin$Growth = gsub("%", "", fin$Growth)
+```
+
+Convert those three variables into numeric:
+
+```{r}
+fin$Expenses = as.numeric(fin$Expenses)
+fin$Revenue = as.numeric(fin$Revenue)
+fin$Growth = as.numeric(fin$Growth)
+str(fin)
+summary(fin)
+```
+
+## Dealing with Missing Data:
+
+1. Predict with 100% accuracy
+2. Leave as it is
+3. Remove from record entirely
+4. Replace with mean or median(popular)
+5. Fill in by exploring correlations and similarities
+6. Introduce dummy variable for "Missingness"
+
+
+### What is an NA? - "Not Available/Missing Value"
+
+TRUE = 1
+FALSE = 0
+NA
+
+```{r}
+head(fin, 24)
+fin[!complete.cases(fin), ] 
+```
+
+Update Import:
+
+```{r}
+fin1 = read.csv("./data/Future500.csv", na.strings = c(""))
+head(fin1, 24)
+fin1[!complete.cases(fin1), ] 
+```
+
+### Filtering: Non-missing Data with `which()`
+
+```{r}
+head(fin)
+fin[fin$Revenue == 9746272, ] 
+#will compare NA values with 9746272, so produced mysterious NAs.
+which(fin$Revenue == 9746272)
+#?which()
+fin[which(fin$Revenue == 9746272), ]
+#^ select the exact row 
+fin[fin$Employees == 45, ]
+fin[which(fin$Employees == 45), ]
+```
+
