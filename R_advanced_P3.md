@@ -522,3 +522,340 @@ fin[which(fin$Employees == 45), ]
     ##  9 435   Lucr… IT Serv… 2004             45 VA    Glen…  1.29e7  3512395 9.38e6
     ## 10 487   Genu… Constru… 2007             45 NC    Gree…  8.50e6  5741773 2.76e6
     ## # … with 1 more variable: Growth <dbl>
+
+### Filtering: Using `is.na()` for missing data
+
+Cannot compare things with NAs.
+
+``` r
+fin[fin$Expenses == NA, ]
+```
+
+    ## # A tibble: 500 x 11
+    ##    ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##    <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ##  1 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  2 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  3 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  4 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  5 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  6 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  7 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  8 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ##  9 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ## 10 <NA>  <NA>  <NA>     <NA>             NA <NA>  <NA>       NA       NA     NA
+    ## # … with 490 more rows, and 1 more variable: Growth <dbl>
+
+``` r
+a = c(1, 24, 543, NA, 76, 45, NA)
+is.na(a)
+```
+
+    ## [1] FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE
+
+``` r
+is.na(fin$Expenses)
+```
+
+    ##   [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
+    ##  [13] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
+    ##  [49] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [61] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [73] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [85] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ##  [97] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [109] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [121] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [133] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [145] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [157] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [169] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [181] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [193] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [205] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [217] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [229] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [241] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [253] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [265] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [277] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [289] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [301] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [313] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [325] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [337] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [349] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [361] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [373] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [385] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [397] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [409] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [421] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [433] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [445] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [457] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [469] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [481] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+    ## [493] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+
+``` r
+fin[is.na(fin$Expenses), ]
+```
+
+    ## # A tibble: 3 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ## 2 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ## 3 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin[is.na(fin$State), ]
+```
+
+    ## # A tibble: 4 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 11    Cane… Health   2012              6 <NA>  New …  1.06e7  7591189 3.01e6
+    ## 2 84    Dril… Software 2010             30 <NA>  San …  7.80e6  2785799 5.01e6
+    ## 3 267   Circ… Software 2010             14 <NA>  San …  9.07e6  5929828 3.14e6
+    ## 4 379   Stov… Retail   2013             73 <NA>  New …  1.38e7  5904502 7.91e6
+    ## # … with 1 more variable: Growth <dbl>
+
+### Remove records with missing data:
+
+``` r
+fin_backup = fin
+fin[!complete.cases(fin), ]
+```
+
+    ## # A tibble: 12 x 11
+    ##    ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##    <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ##  1 3     Gree… Retail   2012             NA SC    Gree…  9.75e6  1044375  8.70e6
+    ##  2 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ##  3 11    Cane… Health   2012              6 <NA>  New …  1.06e7  7591189  3.01e6
+    ##  4 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ##  5 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ##  6 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ##  7 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ##  8 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ##  9 84    Dril… Software 2010             30 <NA>  San …  7.80e6  2785799  5.01e6
+    ## 10 267   Circ… Software 2010             14 <NA>  San …  9.07e6  5929828  3.14e6
+    ## 11 332   West… Financi… 2010             NA MI    Troy   1.19e7  5245126  6.62e6
+    ## 12 379   Stov… Retail   2013             73 <NA>  New …  1.38e7  5904502  7.91e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin[is.na(fin$Industry), ]
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303 8.43e6
+    ## 2 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498 3.01e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin[!is.na(fin$Industry), ] #opposite
+```
+
+    ## # A tibble: 498 x 11
+    ##    ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##    <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ##  1 1     Over… Software 2006             25 TN    Fran…  9.68e6  1130700  8.55e6
+    ##  2 2     Unim… IT Serv… 2009             36 PA    Newt…  1.40e7   804035  1.32e7
+    ##  3 3     Gree… Retail   2012             NA SC    Gree…  9.75e6  1044375  8.70e6
+    ##  4 4     Blac… IT Serv… 2011             66 CA    Oran…  1.54e7  4631808  1.07e7
+    ##  5 5     Year… Software 2013             45 WI    Madi…  8.57e6  4374841  4.19e6
+    ##  6 6     Indi… IT Serv… 2013             60 NJ    Mana…  1.28e7  4626275  8.18e6
+    ##  7 7     Tres… Financi… 2009            116 MO    Clay…  5.39e6  2127984  3.26e6
+    ##  8 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ##  9 9     Lamt… IT Serv… 2009             55 CA    San …  1.18e7  6482465  5.27e6
+    ## 10 10    Stri… Financi… 2010             25 FL    Boca…  1.23e7   916455  1.14e7
+    ## # … with 488 more rows, and 1 more variable: Growth <dbl>
+
+``` r
+fin_backup = fin_backup[!is.na(fin_backup$Industry), ] 
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 10 x 11
+    ##    ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##    <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ##  1 3     Gree… Retail   2012             NA SC    Gree…  9.75e6  1044375  8.70e6
+    ##  2 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ##  3 11    Cane… Health   2012              6 <NA>  New …  1.06e7  7591189  3.01e6
+    ##  4 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ##  5 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ##  6 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ##  7 84    Dril… Software 2010             30 <NA>  San …  7.80e6  2785799  5.01e6
+    ##  8 267   Circ… Software 2010             14 <NA>  San …  9.07e6  5929828  3.14e6
+    ##  9 332   West… Financi… 2010             NA MI    Troy   1.19e7  5245126  6.62e6
+    ## 10 379   Stov… Retail   2013             73 <NA>  New …  1.38e7  5904502  7.91e6
+    ## # … with 1 more variable: Growth <dbl>
+
+## Reset Dataframe index
+
+``` r
+row.names(fin_backup)
+```
+
+    ##   [1] "1"   "2"   "3"   "4"   "5"   "6"   "7"   "8"   "9"   "10"  "11"  "12" 
+    ##  [13] "13"  "14"  "15"  "16"  "17"  "18"  "19"  "20"  "21"  "22"  "23"  "24" 
+    ##  [25] "25"  "26"  "27"  "28"  "29"  "30"  "31"  "32"  "33"  "34"  "35"  "36" 
+    ##  [37] "37"  "38"  "39"  "40"  "41"  "42"  "43"  "44"  "45"  "46"  "47"  "48" 
+    ##  [49] "49"  "50"  "51"  "52"  "53"  "54"  "55"  "56"  "57"  "58"  "59"  "60" 
+    ##  [61] "61"  "62"  "63"  "64"  "65"  "66"  "67"  "68"  "69"  "70"  "71"  "72" 
+    ##  [73] "73"  "74"  "75"  "76"  "77"  "78"  "79"  "80"  "81"  "82"  "83"  "84" 
+    ##  [85] "85"  "86"  "87"  "88"  "89"  "90"  "91"  "92"  "93"  "94"  "95"  "96" 
+    ##  [97] "97"  "98"  "99"  "100" "101" "102" "103" "104" "105" "106" "107" "108"
+    ## [109] "109" "110" "111" "112" "113" "114" "115" "116" "117" "118" "119" "120"
+    ## [121] "121" "122" "123" "124" "125" "126" "127" "128" "129" "130" "131" "132"
+    ## [133] "133" "134" "135" "136" "137" "138" "139" "140" "141" "142" "143" "144"
+    ## [145] "145" "146" "147" "148" "149" "150" "151" "152" "153" "154" "155" "156"
+    ## [157] "157" "158" "159" "160" "161" "162" "163" "164" "165" "166" "167" "168"
+    ## [169] "169" "170" "171" "172" "173" "174" "175" "176" "177" "178" "179" "180"
+    ## [181] "181" "182" "183" "184" "185" "186" "187" "188" "189" "190" "191" "192"
+    ## [193] "193" "194" "195" "196" "197" "198" "199" "200" "201" "202" "203" "204"
+    ## [205] "205" "206" "207" "208" "209" "210" "211" "212" "213" "214" "215" "216"
+    ## [217] "217" "218" "219" "220" "221" "222" "223" "224" "225" "226" "227" "228"
+    ## [229] "229" "230" "231" "232" "233" "234" "235" "236" "237" "238" "239" "240"
+    ## [241] "241" "242" "243" "244" "245" "246" "247" "248" "249" "250" "251" "252"
+    ## [253] "253" "254" "255" "256" "257" "258" "259" "260" "261" "262" "263" "264"
+    ## [265] "265" "266" "267" "268" "269" "270" "271" "272" "273" "274" "275" "276"
+    ## [277] "277" "278" "279" "280" "281" "282" "283" "284" "285" "286" "287" "288"
+    ## [289] "289" "290" "291" "292" "293" "294" "295" "296" "297" "298" "299" "300"
+    ## [301] "301" "302" "303" "304" "305" "306" "307" "308" "309" "310" "311" "312"
+    ## [313] "313" "314" "315" "316" "317" "318" "319" "320" "321" "322" "323" "324"
+    ## [325] "325" "326" "327" "328" "329" "330" "331" "332" "333" "334" "335" "336"
+    ## [337] "337" "338" "339" "340" "341" "342" "343" "344" "345" "346" "347" "348"
+    ## [349] "349" "350" "351" "352" "353" "354" "355" "356" "357" "358" "359" "360"
+    ## [361] "361" "362" "363" "364" "365" "366" "367" "368" "369" "370" "371" "372"
+    ## [373] "373" "374" "375" "376" "377" "378" "379" "380" "381" "382" "383" "384"
+    ## [385] "385" "386" "387" "388" "389" "390" "391" "392" "393" "394" "395" "396"
+    ## [397] "397" "398" "399" "400" "401" "402" "403" "404" "405" "406" "407" "408"
+    ## [409] "409" "410" "411" "412" "413" "414" "415" "416" "417" "418" "419" "420"
+    ## [421] "421" "422" "423" "424" "425" "426" "427" "428" "429" "430" "431" "432"
+    ## [433] "433" "434" "435" "436" "437" "438" "439" "440" "441" "442" "443" "444"
+    ## [445] "445" "446" "447" "448" "449" "450" "451" "452" "453" "454" "455" "456"
+    ## [457] "457" "458" "459" "460" "461" "462" "463" "464" "465" "466" "467" "468"
+    ## [469] "469" "470" "471" "472" "473" "474" "475" "476" "477" "478" "479" "480"
+    ## [481] "481" "482" "483" "484" "485" "486" "487" "488" "489" "490" "491" "492"
+    ## [493] "493" "494" "495" "496" "497" "498"
+
+``` r
+rownames(fin_backup) = 1:nrow(fin_backup)
+```
+
+    ## Warning: Setting row names on a tibble is deprecated.
+
+``` r
+fin_backup = fin
+
+rownames(fin_backup) = NULL
+```
+
+### Replacing Missing Data: Factual Analysis
+
+``` r
+fin_backup[is.na(fin_backup$State), ]
+```
+
+    ## # A tibble: 4 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 11    Cane… Health   2012              6 <NA>  New …  1.06e7  7591189 3.01e6
+    ## 2 84    Dril… Software 2010             30 <NA>  San …  7.80e6  2785799 5.01e6
+    ## 3 267   Circ… Software 2010             14 <NA>  San …  9.07e6  5929828 3.14e6
+    ## 4 379   Stov… Retail   2013             73 <NA>  New …  1.38e7  5904502 7.91e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "New York", ]
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 11    Cane… Health   2012              6 <NA>  New …  1.06e7  7591189 3.01e6
+    ## 2 379   Stov… Retail   2013             73 <NA>  New …  1.38e7  5904502 7.91e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "New York", "State" ] = "NY"
+#check:
+fin_backup[c(11, 379), ]
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 11    Cane… Health   2012              6 NY    New …  1.06e7  7591189 3.01e6
+    ## 2 379   Stov… Retail   2013             73 NY    New …  1.38e7  5904502 7.91e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 10 x 11
+    ##    ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##    <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ##  1 3     Gree… Retail   2012             NA SC    Gree…  9.75e6  1044375  8.70e6
+    ##  2 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ##  3 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ##  4 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ##  5 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ##  6 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ##  7 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ##  8 84    Dril… Software 2010             30 <NA>  San …  7.80e6  2785799  5.01e6
+    ##  9 267   Circ… Software 2010             14 <NA>  San …  9.07e6  5929828  3.14e6
+    ## 10 332   West… Financi… 2010             NA MI    Troy   1.19e7  5245126  6.62e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "San Francisco", ]
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 84    Dril… Software 2010             30 <NA>  San … 7800620  2785799 5.01e6
+    ## 2 267   Circ… Software 2010             14 <NA>  San … 9067070  5929828 3.14e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "San Francisco", "State" ] = "CA"
+
+# check:
+fin_backup[c(84, 267), ]
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 84    Dril… Software 2010             30 CA    San … 7800620  2785799 5.01e6
+    ## 2 267   Circ… Software 2010             14 CA    San … 9067070  5929828 3.14e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 8 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 3     Gree… Retail   2012             NA SC    Gree…  9.75e6  1044375  8.70e6
+    ## 2 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ## 3 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ## 4 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ## 5 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ## 6 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ## 7 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ## 8 332   West… Financi… 2010             NA MI    Troy   1.19e7  5245126  6.62e6
+    ## # … with 1 more variable: Growth <dbl>

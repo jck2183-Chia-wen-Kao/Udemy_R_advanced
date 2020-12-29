@@ -123,3 +123,58 @@ fin[fin$Employees == 45, ]
 fin[which(fin$Employees == 45), ]
 ```
 
+### Filtering: Using `is.na()` for missing data
+
+Cannot compare things with NAs.
+
+```{r}
+fin[fin$Expenses == NA, ]
+a = c(1, 24, 543, NA, 76, 45, NA)
+is.na(a)
+is.na(fin$Expenses)
+fin[is.na(fin$Expenses), ]
+fin[is.na(fin$State), ]
+```
+
+### Remove records with missing data:
+
+```{r}
+fin_backup = fin
+fin[!complete.cases(fin), ]
+fin[is.na(fin$Industry), ]
+fin[!is.na(fin$Industry), ] #opposite
+fin_backup = fin_backup[!is.na(fin_backup$Industry), ] 
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+## Reset Dataframe index
+
+```{r}
+row.names(fin_backup)
+
+rownames(fin_backup) = 1:nrow(fin_backup)
+
+fin_backup = fin
+
+rownames(fin_backup) = NULL
+```
+
+### Replacing Missing Data: Factual Analysis
+
+```{r}
+fin_backup[is.na(fin_backup$State), ]
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "New York", ]
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "New York", "State" ] = "NY"
+#check:
+fin_backup[c(11, 379), ]
+
+fin_backup[!complete.cases(fin_backup), ]
+
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "San Francisco", ]
+fin_backup[is.na(fin_backup$State) & fin_backup$City == "San Francisco", "State" ] = "CA"
+
+# check:
+fin_backup[c(84, 267), ]
+fin_backup[!complete.cases(fin_backup), ]
+```
+
