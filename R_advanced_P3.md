@@ -750,11 +750,7 @@ row.names(fin_backup)
 
 ``` r
 rownames(fin_backup) = 1:nrow(fin_backup)
-```
 
-    ## Warning: Setting row names on a tibble is deprecated.
-
-``` r
 fin_backup = fin
 
 rownames(fin_backup) = NULL
@@ -1146,3 +1142,46 @@ fin_backup[!complete.cases(fin_backup), ]
     ## 2 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498 3.01e6
     ## 3 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233 1.85e6
     ## # … with 1 more variable: Growth <dbl>
+
+## Visualization
+
+Scatterplot
+
+``` r
+fin_backup %>% 
+    ggplot(aes(x = Revenue,  y = Expenses, color = Industry)) +
+    geom_point(aes(size = Profit))
+```
+
+<img src="R_advanced_P3_files/figure-gfm/unnamed-chunk-21-1.png" width="90%" />
+Scatter plot with Trends
+
+``` r
+fin_backup %>% 
+    ggplot(aes(x = Revenue,  y = Expenses, color = Industry)) +
+    geom_point() +
+    geom_smooth(method = "loess", formula = y ~ x,fill = NA, size = 1.2)
+```
+
+<img src="R_advanced_P3_files/figure-gfm/unnamed-chunk-22-1.png" width="90%" />
+
+Boxplot
+
+``` r
+fin_backup %>% 
+    ggplot(aes(x = Industry,  y = Growth, color = Industry)) +
+    geom_boxplot(size = 1)
+```
+
+<img src="R_advanced_P3_files/figure-gfm/unnamed-chunk-23-1.png" width="90%" />
+
+Extra :
+
+``` r
+fin_backup %>% 
+    ggplot(aes(x = Industry,  y = Growth, color = Industry)) +
+    geom_jitter() +
+    geom_boxplot(size = 1, alpha = 0.5, outlier.color = NA)
+```
+
+<img src="R_advanced_P3_files/figure-gfm/unnamed-chunk-24-1.png" width="90%" />

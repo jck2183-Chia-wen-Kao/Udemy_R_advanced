@@ -7,6 +7,20 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
 ## Import Data
@@ -275,5 +289,39 @@ fin_backup[is.na(fin_backup$Expenses), "Expenses"] = fin_backup[is.na(fin_backup
 
 fin_backup[17,]
 fin_backup[!complete.cases(fin_backup), ]
+```
+
+## Visualization
+Scatterplot
+```{r}
+fin_backup %>% 
+    ggplot(aes(x = Revenue,  y = Expenses, color = Industry)) +
+    geom_point(aes(size = Profit))
+```
+Scatter plot with Trends
+
+```{r}
+fin_backup %>% 
+    ggplot(aes(x = Revenue,  y = Expenses, color = Industry)) +
+    geom_point() +
+    geom_smooth(method = "loess", formula = y ~ x,fill = NA, size = 1.2)
+```
+
+Boxplot
+
+```{r}
+fin_backup %>% 
+    ggplot(aes(x = Industry,  y = Growth, color = Industry)) +
+    geom_boxplot(size = 1)
+```
+
+Extra :
+
+```{r}
+fin_backup %>% 
+    ggplot(aes(x = Industry,  y = Growth, color = Industry)) +
+    geom_jitter() +
+    geom_boxplot(size = 1, alpha = 0.5, outlier.color = NA)
+
 ```
 
