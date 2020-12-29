@@ -859,3 +859,290 @@ fin_backup[!complete.cases(fin_backup), ]
     ## 7 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
     ## 8 332   West… Financi… 2010             NA MI    Troy   1.19e7  5245126  6.62e6
     ## # … with 1 more variable: Growth <dbl>
+
+## Replacing Missing Data : Median Imputation Method
+
+Part 1
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 8 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 3     Gree… Retail   2012             NA SC    Gree…  9.75e6  1044375  8.70e6
+    ## 2 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ## 3 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ## 4 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ## 5 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ## 6 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ## 7 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ## 8 332   West… Financi… 2010             NA MI    Troy   1.19e7  5245126  6.62e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+#median(fin_backup[,"Employees"], na.rm = TRUE)
+
+lapply(fin_backup[,"Employees"],median, na.rm = TRUE)
+```
+
+    ## $Employees
+    ## [1] 56
+
+``` r
+med_empl_retail = lapply(fin_backup[fin_backup$Industry == "Retail","Employees"],median, na.rm = TRUE)
+
+#typeof(fin_backup[,"Employees"])  #-->list
+
+#mean(fin[,"Employees"],na.rm = TRUE)
+lapply(fin_backup[,"Employees"],mean, na.rm = TRUE)
+```
+
+    ## $Employees
+    ## [1] 148.6104
+
+``` r
+lapply(fin_backup[fin_backup$Industry == "Retail","Employees"],mean, na.rm = TRUE)
+```
+
+    ## $Employees
+    ## [1] 209.2766
+
+``` r
+lapply(fin_backup[fin_backup$Industry == "Retail","Employees"],mean, na.rm = TRUE)
+```
+
+    ## $Employees
+    ## [1] 209.2766
+
+``` r
+fin_backup[is.na(fin_backup$Employees) & fin_backup$Industry == "Retail", "Employees"] = med_empl_retail
+
+# check:
+fin_backup[3, ]
+```
+
+    ## # A tibble: 1 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 3     Gree… Retail   2012             28 SC    Gree… 9746272  1044375 8.70e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+lapply(fin_backup[,"Employees"],median, na.rm = TRUE)
+```
+
+    ## $Employees
+    ## [1] 56
+
+``` r
+lapply(fin_backup[,"Employees"],mean, na.rm = TRUE)
+```
+
+    ## $Employees
+    ## [1] 148.3687
+
+``` r
+med_empl_finance = lapply(fin_backup[fin_backup$Industry == "Financial Services","Employees"],median, na.rm = TRUE)
+
+mean_empl_finance = lapply(fin_backup[fin_backup$Industry == "Financial Services","Employees"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Employees) & fin_backup$Industry == "Financial Services", "Employees"] = med_empl_finance
+
+#check:
+
+fin_backup[332,]
+```
+
+    ## # A tibble: 1 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 332   West… Financi… 2010             80 MI    Troy   1.19e7  5245126 6.62e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 6 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ## 2 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ## 3 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ## 4 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ## 5 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ## 6 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ## # … with 1 more variable: Growth <dbl>
+
+Part 2
+
+``` r
+lapply(fin_backup[,"Growth"],median, na.rm = TRUE)
+```
+
+    ## $Growth
+    ## [1] 15
+
+``` r
+med_growth_constr = lapply(fin_backup[fin_backup$Industry == "Construction","Growth"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Growth) & fin_backup$Industry == "Construction", "Growth"] = med_growth_constr
+
+#check:
+fin_backup[8, ]
+```
+
+    ## # A tibble: 1 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…      NA       NA     NA
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 6 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood… NA            NA NA     
+    ## 2 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ## 3 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ## 4 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ## 5 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ## 6 44    Ganz… Constru… 2010            224 TN    Fran… NA            NA NA     
+    ## # … with 1 more variable: Growth <dbl>
+
+Part 3 Mini-Exercise
+
+``` r
+#Revenue
+med_revenue_constr = lapply(fin_backup[fin_backup$Industry == "Construction","Revenue"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Revenue) & fin_backup$Industry == "Construction", "Revenue"] = med_revenue_constr
+
+#check:
+fin_backup[8, ]
+```
+
+    ## # A tibble: 1 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…  9.06e6       NA     NA
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 6 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…  9.06e6       NA NA     
+    ## 2 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303  8.43e6
+    ## 3 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498  3.01e6
+    ## 4 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA  1.19e7
+    ## 5 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233  1.85e6
+    ## 6 44    Ganz… Constru… 2010            224 TN    Fran…  9.06e6       NA NA     
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+#Expenses:
+med_expense_constr = lapply(fin_backup[fin_backup$Industry == "Construction","Expenses"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Expenses) & is.na(fin_backup$Profit), ] 
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…  9.06e6       NA     NA
+    ## 2 44    Ganz… Constru… 2010            224 TN    Fran…  9.06e6       NA     NA
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[is.na(fin_backup$Expenses) & fin_backup$Industry == "Construction", "Expenses"] = med_expense_constr
+
+# check:
+fin_backup[8, ]
+```
+
+    ## # A tibble: 1 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…  9.06e6 4506976.     NA
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 6 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses  Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>   <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…  9.06e6 4506976. NA     
+    ## 2 14    Tech… <NA>     2006             65 CA    San …  1.39e7 5470303   8.43e6
+    ## 3 15    City… <NA>     2010             25 CO    Loui…  9.25e6 6249498   3.01e6
+    ## 4 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7      NA   1.19e7
+    ## 5 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6 7567233   1.85e6
+    ## 6 44    Ganz… Constru… 2010            224 TN    Fran…  9.06e6 4506976. NA     
+    ## # … with 1 more variable: Growth <dbl>
+
+### Replacing Missing Data : Deriving Values Method
+
+Revenue - Expense = Profit Expense = Revenue - Profit
+
+``` r
+fin_backup[is.na(fin_backup$Profit), "Profit"] = fin_backup[is.na(fin_backup$Profit), "Revenue"] - fin_backup[is.na(fin_backup$Profit), "Expenses"]
+
+# check:
+fin_backup[c(8, 44), ]
+```
+
+    ## # A tibble: 2 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 8     Redn… Constru… 2013             73 NY    Wood…  9.06e6 4506976. 4.55e6
+    ## 2 44    Ganz… Constru… 2010            224 TN    Fran…  9.06e6 4506976. 4.55e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 4 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303 8.43e6
+    ## 2 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498 3.01e6
+    ## 3 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7       NA 1.19e7
+    ## 4 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233 1.85e6
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[is.na(fin_backup$Expenses), "Expenses"] = fin_backup[is.na(fin_backup$Expenses), "Revenue"] - fin_backup[is.na(fin_backup$Expenses), "Profit"]
+
+#check:
+
+fin_backup[17,]
+```
+
+    ## # A tibble: 1 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 17    Ganz… IT Serv… 2011             75 NJ    Isel…  1.40e7  2100000 1.19e7
+    ## # … with 1 more variable: Growth <dbl>
+
+``` r
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+    ## # A tibble: 3 x 11
+    ##   ID    Name  Industry Inception Employees State City  Revenue Expenses Profit
+    ##   <fct> <chr> <chr>    <fct>         <dbl> <chr> <chr>   <dbl>    <dbl>  <dbl>
+    ## 1 14    Tech… <NA>     2006             65 CA    San …  1.39e7  5470303 8.43e6
+    ## 2 15    City… <NA>     2010             25 CO    Loui…  9.25e6  6249498 3.01e6
+    ## 3 22    Lath… Health   <NA>            103 VA    McLe…  9.42e6  7567233 1.85e6
+    ## # … with 1 more variable: Growth <dbl>

@@ -178,3 +178,102 @@ fin_backup[c(84, 267), ]
 fin_backup[!complete.cases(fin_backup), ]
 ```
 
+## Replacing Missing Data : Median Imputation Method
+
+Part 1
+
+```{r}
+fin_backup[!complete.cases(fin_backup), ]
+
+#median(fin_backup[,"Employees"], na.rm = TRUE)
+
+lapply(fin_backup[,"Employees"],median, na.rm = TRUE)
+med_empl_retail = lapply(fin_backup[fin_backup$Industry == "Retail","Employees"],median, na.rm = TRUE)
+
+#typeof(fin_backup[,"Employees"])  #-->list
+
+#mean(fin[,"Employees"],na.rm = TRUE)
+lapply(fin_backup[,"Employees"],mean, na.rm = TRUE)
+lapply(fin_backup[fin_backup$Industry == "Retail","Employees"],mean, na.rm = TRUE)
+
+lapply(fin_backup[fin_backup$Industry == "Retail","Employees"],mean, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Employees) & fin_backup$Industry == "Retail", "Employees"] = med_empl_retail
+
+# check:
+fin_backup[3, ]
+```
+
+
+```{r}
+lapply(fin_backup[,"Employees"],median, na.rm = TRUE)
+lapply(fin_backup[,"Employees"],mean, na.rm = TRUE)
+
+med_empl_finance = lapply(fin_backup[fin_backup$Industry == "Financial Services","Employees"],median, na.rm = TRUE)
+
+mean_empl_finance = lapply(fin_backup[fin_backup$Industry == "Financial Services","Employees"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Employees) & fin_backup$Industry == "Financial Services", "Employees"] = med_empl_finance
+
+#check:
+
+fin_backup[332,]
+fin_backup[!complete.cases(fin_backup), ]
+```
+Part 2
+
+```{r}
+lapply(fin_backup[,"Growth"],median, na.rm = TRUE)
+
+med_growth_constr = lapply(fin_backup[fin_backup$Industry == "Construction","Growth"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Growth) & fin_backup$Industry == "Construction", "Growth"] = med_growth_constr
+
+#check:
+fin_backup[8, ]
+
+fin_backup[!complete.cases(fin_backup), ]
+```
+Part 3
+Mini-Exercise
+```{r}
+#Revenue
+med_revenue_constr = lapply(fin_backup[fin_backup$Industry == "Construction","Revenue"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Revenue) & fin_backup$Industry == "Construction", "Revenue"] = med_revenue_constr
+
+#check:
+fin_backup[8, ]
+fin_backup[!complete.cases(fin_backup), ]
+#Expenses:
+med_expense_constr = lapply(fin_backup[fin_backup$Industry == "Construction","Expenses"],median, na.rm = TRUE)
+
+fin_backup[is.na(fin_backup$Expenses) & is.na(fin_backup$Profit), ] 
+
+fin_backup[is.na(fin_backup$Expenses) & fin_backup$Industry == "Construction", "Expenses"] = med_expense_constr
+
+# check:
+fin_backup[8, ]
+fin_backup[!complete.cases(fin_backup), ]
+```
+
+
+### Replacing Missing Data : Deriving Values Method
+Revenue - Expense = Profit
+Expense = Revenue - Profit
+
+```{r}
+fin_backup[is.na(fin_backup$Profit), "Profit"] = fin_backup[is.na(fin_backup$Profit), "Revenue"] - fin_backup[is.na(fin_backup$Profit), "Expenses"]
+
+# check:
+fin_backup[c(8, 44), ]
+fin_backup[!complete.cases(fin_backup), ]
+
+fin_backup[is.na(fin_backup$Expenses), "Expenses"] = fin_backup[is.na(fin_backup$Expenses), "Revenue"] - fin_backup[is.na(fin_backup$Expenses), "Profit"]
+
+#check:
+
+fin_backup[17,]
+fin_backup[!complete.cases(fin_backup), ]
+```
+
