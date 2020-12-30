@@ -1,0 +1,60 @@
+---
+title: "R_advanced_P4_List"
+subtitle : "Play around with Factor"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+## Import Data
+
+```{r}
+coal_mining_df = read_csv("./data/Machine-Utilization.csv")
+head(coal_mining_df, 12)
+str(coal_mining_df)
+summary(coal_mining_df)
+```
+
+## Derive utilization column
+
+```{r}
+coal_mining_df$Utilization = 1 - coal_mining_df$`Percent Idle`
+
+head(coal_mining_df, 12)
+```
+
+## Handling Date-Time in R
+
+```{r}
+tail(coal_mining_df) #make sure the date format: DDMMYY
+?POSIXct # store time from 1970/1/1
+coal_mining_df$PosixTime = as.POSIXct(coal_mining_df$Timestamp, format = "%d/%m/%Y %H:%M")
+
+head(coal_mining_df, 12)
+summary(coal_mining_df)
+```
+How to rearrange columns in a df:
+
+```{r}
+coal_mining_df = coal_mining_df %>%  select(-Timestamp)
+coal_mining_df = coal_mining_df[, c(4, 1, 2, 3)]
+head(coal_mining_df, 12)
+```
+
