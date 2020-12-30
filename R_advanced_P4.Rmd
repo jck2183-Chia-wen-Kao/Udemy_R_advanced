@@ -58,3 +58,49 @@ coal_mining_df = coal_mining_df[, c(4, 1, 2, 3)]
 head(coal_mining_df, 12)
 ```
 
+## What is a list?
+
+```{r}
+summary(coal_mining_df)
+
+RL1 = coal_mining_df %>% 
+    filter(Machine == "RL1")
+
+RL1$Machine = factor(RL1$Machine)
+
+summary(RL1)
+
+```
+
+## Construct List
+
+Character:RL1
+Numeric: Statistics variable (min, mean, median, max)
+Logical: TRUE/FALSE
+
+```{r}
+coal_stats_rl1 = c(min(RL1$Utilization, na.rm = TRUE), 
+                   mean(RL1$Utilization, na.rm = TRUE), 
+                   median(RL1$Utilization, na.rm = TRUE), 
+                   max(RL1$Utilization, na.rm = TRUE))
+
+coal_under_90_flag = length(which(RL1$Utilization < 0.9)) > 0
+
+list_rl1 = list("RL1", coal_stats_rl1, coal_under_90_flag)
+```
+
+Naming components of a list:
+
+```{r}
+names(list_rl1) = c("Machine", "Stats", "LowThreshold")
+list_rl1
+```
+Another way:
+
+```{r}
+rm(list_rl1)
+list_rl1 = list(Machine = "RL1", 
+                Stats = coal_stats_rl1, 
+                LowThreshold = coal_under_90_flag)
+```
+

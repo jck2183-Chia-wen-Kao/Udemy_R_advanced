@@ -181,3 +181,85 @@ head(coal_mining_df, 12)
     ## 10 2016-09-01 09:00:00 RL1             0.0212       0.979
     ## 11 2016-09-01 10:00:00 RL1             0.0138       0.986
     ## 12 2016-09-01 11:00:00 RL1             0.0192       0.981
+
+## What is a list?
+
+``` r
+summary(coal_mining_df)
+```
+
+    ##    PosixTime                     Machine           Percent Idle   
+    ##  Min.   :2016-09-01 00:00:00   Length:3600        Min.   :0.0000  
+    ##  1st Qu.:2016-09-08 11:45:00   Class :character   1st Qu.:0.0262  
+    ##  Median :2016-09-15 23:30:00   Mode  :character   Median :0.0410  
+    ##  Mean   :2016-09-15 23:30:00                      Mean   :0.0431  
+    ##  3rd Qu.:2016-09-23 11:15:00                      3rd Qu.:0.0576  
+    ##  Max.   :2016-09-30 23:00:00                      Max.   :0.1508  
+    ##                                                   NA's   :361     
+    ##   Utilization    
+    ##  Min.   :0.8492  
+    ##  1st Qu.:0.9424  
+    ##  Median :0.9590  
+    ##  Mean   :0.9569  
+    ##  3rd Qu.:0.9738  
+    ##  Max.   :1.0000  
+    ##  NA's   :361
+
+``` r
+RL1 = coal_mining_df %>% 
+    filter(Machine == "RL1")
+
+RL1$Machine = factor(RL1$Machine)
+
+summary(RL1)
+```
+
+    ##    PosixTime                   Machine    Percent Idle      Utilization    
+    ##  Min.   :2016-09-01 00:00:00   RL1:720   Min.   :0.00500   Min.   :0.8492  
+    ##  1st Qu.:2016-09-08 11:45:00             1st Qu.:0.03208   1st Qu.:0.9403  
+    ##  Median :2016-09-15 23:30:00             Median :0.04613   Median :0.9539  
+    ##  Mean   :2016-09-15 23:30:00             Mean   :0.04830   Mean   :0.9517  
+    ##  3rd Qu.:2016-09-23 11:15:00             3rd Qu.:0.05967   3rd Qu.:0.9679  
+    ##  Max.   :2016-09-30 23:00:00             Max.   :0.15077   Max.   :0.9950  
+    ##                                          NA's   :7         NA's   :7
+
+## Construct List
+
+Character:RL1 Numeric: Statistics variable (min, mean, median, max)
+Logical: TRUE/FALSE
+
+``` r
+coal_stats_rl1 = c(min(RL1$Utilization, na.rm = TRUE), 
+                   mean(RL1$Utilization, na.rm = TRUE), 
+                   median(RL1$Utilization, na.rm = TRUE), 
+                   max(RL1$Utilization, na.rm = TRUE))
+
+coal_under_90_flag = length(which(RL1$Utilization < 0.9)) > 0
+
+list_rl1 = list("RL1", coal_stats_rl1, coal_under_90_flag)
+```
+
+Naming components of a list:
+
+``` r
+names(list_rl1) = c("Machine", "Stats", "LowThreshold")
+list_rl1
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+    ## 
+    ## $LowThreshold
+    ## [1] TRUE
+
+Another way:
+
+``` r
+rm(list_rl1)
+list_rl1 = list(Machine = "RL1", 
+                Stats = coal_stats_rl1, 
+                LowThreshold = coal_under_90_flag)
+```
