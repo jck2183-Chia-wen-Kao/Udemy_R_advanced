@@ -263,3 +263,346 @@ list_rl1 = list(Machine = "RL1",
                 Stats = coal_stats_rl1, 
                 LowThreshold = coal_under_90_flag)
 ```
+
+## Extract components `[]` vs. `[[]]`
+
+  - \[\] :will always return a list.
+
+  - 
+  - $ : same as [\[\]](will%20always%20return%20the%20actual%20object.)
+    but prettier.
+
+<!-- end list -->
+
+``` r
+list_rl1[1]
+```
+
+    ## $Machine
+    ## [1] "RL1"
+
+``` r
+list_rl1[[1]]
+```
+
+    ## [1] "RL1"
+
+``` r
+list_rl1$Machine
+```
+
+    ## [1] "RL1"
+
+``` r
+list_rl1[2]
+```
+
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+
+``` r
+typeof(list_rl1[2])
+```
+
+    ## [1] "list"
+
+``` r
+list_rl1[[2]]
+```
+
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+
+``` r
+typeof(list_rl1[[2]])
+```
+
+    ## [1] "double"
+
+``` r
+list_rl1$Stats
+```
+
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+
+``` r
+typeof(list_rl1$Stats)
+```
+
+    ## [1] "double"
+
+How to access the 4th value of the vector?
+
+``` r
+list_rl1[[2]][4]
+```
+
+    ## [1] 0.995
+
+``` r
+list_rl1$Stats[4]
+```
+
+    ## [1] 0.995
+
+## Add and delete list components
+
+``` r
+list_rl1[4] = "New Information"
+
+list_rl1
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+    ## 
+    ## $LowThreshold
+    ## [1] TRUE
+    ## 
+    ## [[4]]
+    ## [1] "New Information"
+
+Another way to add:
+
+``` r
+list_rl1$UnknownHours = RL1[is.na(RL1$Utilization), "PosixTime"]
+
+list_rl1
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+    ## 
+    ## $LowThreshold
+    ## [1] TRUE
+    ## 
+    ## [[4]]
+    ## [1] "New Information"
+    ## 
+    ## $UnknownHours
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+
+Remove a component with the NULL method.
+
+``` r
+list_rl1[4] = NULL
+
+list_rl1
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+    ## 
+    ## $LowThreshold
+    ## [1] TRUE
+    ## 
+    ## $UnknownHours
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+
+\!\!Notice: numeration has shifted.
+
+``` r
+list_rl1[4]
+```
+
+    ## $UnknownHours
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+
+Add another component: Data Frame : For this machine.
+
+``` r
+list_rl1$Data = RL1
+summary(list_rl1)
+```
+
+    ##              Length Class  Mode     
+    ## Machine      1      -none- character
+    ## Stats        4      -none- numeric  
+    ## LowThreshold 1      -none- logical  
+    ## UnknownHours 1      tbl_df list     
+    ## Data         4      tbl_df list
+
+``` r
+str(list_rl1)
+```
+
+    ## List of 5
+    ##  $ Machine     : chr "RL1"
+    ##  $ Stats       : num [1:4] 0.849 0.952 0.954 0.995
+    ##  $ LowThreshold: logi TRUE
+    ##  $ UnknownHours: tibble [7 × 1] (S3: tbl_df/tbl/data.frame)
+    ##   ..$ PosixTime: POSIXct[1:7], format: "2016-09-01 00:00:00" "2016-09-01 01:00:00" ...
+    ##  $ Data        : tibble [720 × 4] (S3: tbl_df/tbl/data.frame)
+    ##   ..$ PosixTime   : POSIXct[1:720], format: "2016-09-01 00:00:00" "2016-09-01 01:00:00" ...
+    ##   ..$ Machine     : Factor w/ 1 level "RL1": 1 1 1 1 1 1 1 1 1 1 ...
+    ##   ..$ Percent Idle: num [1:720] NA NA NA NA NA ...
+    ##   ..$ Utilization : num [1:720] NA NA NA NA NA ...
+
+## Subset a list
+
+``` r
+list_rl1[[4]][1]
+```
+
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+
+``` r
+list_rl1$UnknownHours[1]
+```
+
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+
+``` r
+list_rl1[1:3]
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+    ## 
+    ## $LowThreshold
+    ## [1] TRUE
+
+``` r
+list_rl1[c(1, 4)]
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $UnknownHours
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+
+``` r
+sublist_rl1 = list_rl1[c("Machine", "Stats")]
+sublist_rl1[[2]][2]
+```
+
+    ## [1] 0.9516976
+
+``` r
+sublist_rl1$Stats[2]
+```
+
+    ## [1] 0.9516976
+
+Double Square Brackets Are NOT for subsetting: list\_rl1\[\[1:3\]\] -\>
+ERROR
+
+## Building a timeseries plot
+
+``` r
+plot1 = coal_mining_df %>% 
+    ggplot(aes(x = PosixTime, y = Utilization)) + 
+    geom_line(aes(color = Machine)) +
+    facet_grid(Machine ~.) +
+    geom_hline(yintercept = 0.90, color = "Gray", linetype = 3)
+
+list_rl1$Plot = plot1
+list_rl1
+```
+
+    ## $Machine
+    ## [1] "RL1"
+    ## 
+    ## $Stats
+    ## [1] 0.8492262 0.9516976 0.9538690 0.9950000
+    ## 
+    ## $LowThreshold
+    ## [1] TRUE
+    ## 
+    ## $UnknownHours
+    ## # A tibble: 7 x 1
+    ##   PosixTime          
+    ##   <dttm>             
+    ## 1 2016-09-01 00:00:00
+    ## 2 2016-09-01 01:00:00
+    ## 3 2016-09-01 02:00:00
+    ## 4 2016-09-01 03:00:00
+    ## 5 2016-09-01 04:00:00
+    ## 6 2016-09-01 05:00:00
+    ## 7 2016-09-01 06:00:00
+    ## 
+    ## $Data
+    ## # A tibble: 720 x 4
+    ##    PosixTime           Machine `Percent Idle` Utilization
+    ##    <dttm>              <fct>            <dbl>       <dbl>
+    ##  1 2016-09-01 00:00:00 RL1            NA           NA    
+    ##  2 2016-09-01 01:00:00 RL1            NA           NA    
+    ##  3 2016-09-01 02:00:00 RL1            NA           NA    
+    ##  4 2016-09-01 03:00:00 RL1            NA           NA    
+    ##  5 2016-09-01 04:00:00 RL1            NA           NA    
+    ##  6 2016-09-01 05:00:00 RL1            NA           NA    
+    ##  7 2016-09-01 06:00:00 RL1            NA           NA    
+    ##  8 2016-09-01 07:00:00 RL1             0.0199       0.980
+    ##  9 2016-09-01 08:00:00 RL1             0.0200       0.980
+    ## 10 2016-09-01 09:00:00 RL1             0.0212       0.979
+    ## # … with 710 more rows
+    ## 
+    ## $Plot
+
+<img src="R_advanced_P4_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
