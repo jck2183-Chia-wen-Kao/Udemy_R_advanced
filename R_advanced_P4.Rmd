@@ -1,6 +1,5 @@
 ---
 title: "R_advanced_P4_List"
-subtitle : "Play around with Factor"
 output: github_document
 ---
 
