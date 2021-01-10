@@ -67,15 +67,111 @@ weather_F$NewYork %>% knitr::kable()
 
 ## Apply Family
 
-  - *apply* : use on a matrix, either the rows or columns.
-  - *tapply* : use on a vector to extract subgroups and apply a function
-    to them by - use on data frams. Same concept as in group by in SQL.
-  - *eapply* : use on an environment.
-  - *lapply* : apply a function to elements of a list.
-  - *sapply* : a version of lapply. Can simplify S the result so it’s
+  - `apply()` : use on a matrix, either the rows or columns.
+  - `tapply()` : use on a vector to extract subgroups and apply a
+    function to them by - use on data frames. Same concept as in group
+    by in SQL.
+  - `eapply()` : use on an environment.
+  - `lapply()` : apply a function to elements of a list.
+  - `sapply()` : a version of lapply. Can simplify S the result so it’s
     not presented as a list.
-  - *vapply* : has a pre-specified type of return value(V).
+  - vapply()\` : has a pre-specified type of return value(V).
   - *replicate* : run a function several times. Usually used with
     generation of random variables.
-  - *mapply*: multivariate version of sapply. Arguments can be recycled.
-  - *rapply* : recursive version of lapply.
+  - `mapply()`: multivariate version of sapply. Arguments can be
+    recycled.
+  - `rapply()` : recursive version of lapply.
+
+## Using `apply()`
+
+``` r
+apply(Chicago_F, 1, mean)
+```
+
+check:
+
+``` r
+mean(Chicago_F["DaysWithPrecip", ])
+```
+
+    ## [1] 9.916667
+
+Analyze one city:
+
+``` r
+apply(Chicago_F, 1, max)
+apply(Chicago_F, 1, min)
+```
+
+for practice:
+
+``` r
+apply(Chicago_F, 2, max) #doesn't make sense, but good practice
+apply(Chicago_F, 2, min)
+```
+
+Comparison:
+
+``` r
+apply(Chicago_F, 1, mean)
+apply(Houston_F, 1, mean)
+apply(NewYork_F, 1, mean)
+apply(SanFrancisco_F, 1, mean)
+```
+
+## Recreating the apply function with loops
+
+Find the mean of each row : \#1- via loop.
+
+``` r
+output = NULL
+for(i in 1:5) { #run cycle
+   output[i] = mean(Chicago_F[i,])
+}
+
+names(output) = rownames(Chicago_F)
+```
+
+2: via apply function:
+
+``` r
+apply(Chicago_F, 1, mean)
+```
+
+## Using `lapply()`
+
+``` r
+t(Chicago_F)
+weather_F
+t(weather_F$Chicago)
+newlist = lapply(weather_F, t) #list (t(weather_F$Chicago), t(weather_F$NewYork)...)
+```
+
+Example 2:
+
+``` r
+rbind(Chicago_F, NewRow = 1:12)
+lapply(weather_F, rbind, NewRow = 1:12)
+```
+
+Example 3:
+
+``` r
+rowMeans(Chicago_F) # = apply(Chicago_F, 1, mean)
+lapply(weather_F, rowMeans)
+```
+
+  - `rowMeans()`
+  - `colMeans()`
+  - `rowSums()`
+  - `colSums()`
+
+## Combining `lapply()` with the `[ ]`operator:
+
+``` r
+weather_F[[1]][1, 1]
+weather_F$Chicago[1, 1]
+lapply(weather_F, "[", 1, 1)
+lapply(weather_F, "[", 1, )
+lapply(weather_F, "[", , 3)
+```
