@@ -153,4 +153,78 @@ lapply(weather_F, "[", 1, 1)
 lapply(weather_F, "[", 1, )
 lapply(weather_F, "[", , 3)
 ```
+## Adding own function
+
+```{r, results = F}
+lapply(weather_F, rowMeans)
+lapply(weather_F, function(x) x[1, ])
+lapply(weather_F, function(x) x[5, ])
+lapply(weather_F, function(x) x[ ,12])
+lapply(weather_F, function(z) z[1, ] - z[2, ])
+lapply(weather_F, function(z) round((z[1,] - z[2,]) / z[2, ], 2))
+```
+## Using `sapply()`
+
+AvgHigh_F for July:
+
+```{r}
+lapply(weather_F, "[", 1, 7) %>% knitr::kable()
+sapply(weather_F, "[", 1, 7) %>% knitr::kable()
+```
+AvgHigh_F for 4th quarter:
+
+```{r}
+lapply(weather_F, "[", 1, 10:12) %>% knitr::kable()
+sapply(weather_F, "[", 1, 10:12) %>% knitr::kable()
+```
+Another Example:
+
+```{r}
+lapply(weather_F, rowMeans) %>% knitr::kable()
+sapply(weather_F, rowMeans) %>% round(digits = 2) %>% knitr::kable() #<<Deliverable 1
+```
+
+Another example:
+
+```{r}
+lapply(weather_F, function(z) round((z[1,] - z[2,]) / z[2, ], 2)) %>% knitr:: kable()
+sapply(weather_F, function(z) round((z[1,] - z[2,]) / z[2, ], 2)) %>% knitr::kable()
+#<<Deliverable 2
+```
+By the way:
+
+```{r}
+sapply(weather_F, rowMeans, simplify = FALSE) %>% knitr::kable()# same as lapply
+```
+## Nesting `apply()` functions
+
+```{r}
+apply(Chicago_F, 1, max) %>% knitr::kable()
+```
+
+Apply across whole list:
+
+```{r, results = F}
+lapply(weather_F, apply, 1, max) %>% knitr::kable() #preferred
+lapply(weather_F, function(x) apply(x, 1, max)) %>% knitr::kable()
+```
+Tidy up :
+
+```{r}
+sapply(weather_F, apply, 1, max) %>% knitr::kable()
+sapply(weather_F, apply, 1, min) %>% knitr::kable()
+```
+## `which.max()` and `which.min()` functions
+
+```{r}
+Chicago_F[1, ] %>% which.max() %>% names()
+```
+By the sound of it: we will have apply- to iterate over rows of the matrix, and we will have `lapply()` or `sapply()` - to iterate the components of the list.
+
+```{r}
+apply(Chicago_F, 1, function(x) names(which.max(x))) %>% 
+    knitr::kable()
+lapply(weather_F, function(y) apply(y, 1, function(x) names(which.max(x)))) %>% knitr::kable()
+sapply(weather_F, function(y) apply(y, 1, function(x) names(which.max(x)))) %>% knitr::kable()
+```
 
